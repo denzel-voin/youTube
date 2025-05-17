@@ -1,10 +1,11 @@
 <script setup>
 
-import DropdownApps from "../DropdownApps.vue";
+import DropdownApps from "../DropdownApps/DropdownApps.vue";
 import Logo from "../../UI/Logo.vue";
 import TheSearch from "./TheSearch.vue";
 import ButtonLogin from "../../UI/ButtonLogin.vue";
 import BaseIcon from "../../UI/BaseIcon.vue";
+import DropdownSettings from "../DropdownSettings/DropdownSettings.vue";
 </script>
 
 <template>
@@ -37,6 +38,7 @@ import BaseIcon from "../../UI/BaseIcon.vue";
       </button>
       <button class="relative group p-2 focus:outline-none">
         <BaseIcon icon="dots" class="w-5 h-5" />
+        <DropdownSettings />
       </button>
       <ButtonLogin />
     </div>
