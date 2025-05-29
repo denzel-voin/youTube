@@ -1,5 +1,9 @@
 <script setup>
-import SideBarContent from "./SideBarContent.vue";
+
+import Logo from "../../../UI/Logo.vue";
+import SideBarContent from "../SideBarContent.vue";
+import BaseIcon from "../../../UI/BaseIcon.vue";
+import MobileSideBarOverlay from "./MobileSideBarOverlay.vue";
 
 const lists = [
   {
@@ -98,13 +102,20 @@ const lists = [
     isActive: false
   }
 ]
-
 </script>
 
 <template>
-  <aside class="hidden xl:block w-64 max-h-screen overflow-auto fixed top-0 pt-12 bg-white z-20">
-    <SideBarContent :lists="lists" />
-  </aside>
+  <MobileSideBarOverlay>
+    <aside class="w-64 max-h-screen overflow-auto bg-white">
+      <section class="flex items-center p-4 border-b sticky top-0 bg-white">
+        <button class="ml-2 mr-6 focus:outline-none">
+          <BaseIcon icon="menu" />
+        </button>
+        <Logo/>
+      </section>
+      <SideBarContent :lists="lists" />
+    </aside>
+  </MobileSideBarOverlay>
 </template>
 
 <style scoped>

@@ -4,9 +4,9 @@
 
 <template>
   <a href="#">
-    <svg width="200" height="55" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+    <svg width="120" height="55" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
       <!-- Красный скруглённый квадрат -->
-      <rect x="10" y="10" width="64" height="64" rx="12" fill="#FF0000"/>
+      <rect x="10" y="15" width="74" height="54" rx="12" fill="#FF0000"/>
 
       <!-- Белая кнопка Play -->
       <polygon points="36,30 36,54 56,42" fill="#FFFFFF"/>
