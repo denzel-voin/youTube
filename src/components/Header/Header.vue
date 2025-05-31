@@ -1,4 +1,4 @@
-<script setup>
+<script>
 
 import DropdownApps from "../DropdownApps/DropdownApps.vue";
 import Logo from "../../UI/Logo.vue";
@@ -6,13 +6,22 @@ import TheSearch from "./TheSearch.vue";
 import ButtonLogin from "../../UI/ButtonLogin.vue";
 import BaseIcon from "../../UI/BaseIcon.vue";
 import DropdownSettings from "../DropdownSettings/DropdownSettings.vue";
+import {defineComponent} from "vue";
+
+export default defineComponent({
+  components: {Logo, BaseIcon, ButtonLogin, TheSearch, DropdownSettings, DropdownApps},
+  emits: {
+    openMobileSideBar: null
+  }
+})
+
 </script>
 
 <template>
   <header class="flex justify-between fixed z-30 w-full bg-white">
     <div class="lg:w-1/4 flex">
       <div class="flex items-center xl:w-64 xl:bg-white pl-4">
-        <button class="mr-3 sm:ml-2 sm:mr-6 focus:outline-none">
+        <button class="mr-3 sm:ml-2 sm:mr-6 focus:outline-none" @click="$emit('openMobileSidebar')">
           <BaseIcon icon="menu" />
         </button>
         <Logo/>
