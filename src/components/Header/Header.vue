@@ -11,7 +11,7 @@ import {defineComponent} from "vue";
 export default defineComponent({
   components: {Logo, BaseIcon, ButtonLogin, TheSearch, DropdownSettings, DropdownApps},
   emits: {
-    openMobileSideBar: null
+    toggleSidebar: null
   }
 })
 
@@ -21,7 +21,7 @@ export default defineComponent({
   <header class="flex justify-between fixed z-30 w-full bg-white">
     <div class="lg:w-1/4 flex">
       <div class="flex items-center xl:w-64 xl:bg-white pl-4">
-        <button class="mr-3 sm:ml-2 sm:mr-6 focus:outline-none" @click="$emit('openMobileSidebar')">
+        <button class="mr-3 sm:ml-2 sm:mr-6 focus:outline-none" @click="$emit('toggleSidebar')">
           <BaseIcon icon="menu" />
         </button>
         <Logo/>

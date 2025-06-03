@@ -1,9 +1,25 @@
 <script setup>
+import { computed } from 'vue'
 
+const { isOpen } = defineProps({
+  isOpen: Boolean
+})
+
+const classes = computed(() => [
+  isOpen ? 'md:block' : 'hidden',
+  'min-h-screen',
+  'overflow-auto',
+  'fixed',
+  'top-0',
+  'pt-14',
+  'bg-white',
+  'z-20',
+])
 </script>
 
+
 <template>
-  <aside class="min-h-screen hidden md:block xl:hidden overflow-auto fixed top-0 pt-14 bg-white z-20">
+  <aside :class="classes">
     <section>
       <ul>
         <li>

@@ -1,5 +1,6 @@
 <script setup>
 import SideBarContent from "./SideBarContent.vue";
+import {computed} from "vue";
 
 const lists = [
   {
@@ -99,10 +100,25 @@ const lists = [
   }
 ]
 
+const {isOpen} = defineProps({
+  isOpen: Boolean,
+})
+
+const classes = computed(() => [
+  isOpen ? 'xl:block' : 'hidden',
+  'overflow-auto',
+  'w-64',
+  'fixed',
+  'top-0',
+  'pt-12',
+  'bg-white',
+  'z-20',
+])
+
 </script>
 
 <template>
-  <aside class="hidden xl:block w-64 max-h-screen overflow-auto fixed top-0 pt-12 bg-white z-20">
+  <aside :class="classes">
     <SideBarContent :lists="lists" />
   </aside>
 </template>

@@ -105,11 +105,11 @@ const lists = [
 ];
 
 const props = defineProps(["isOpen"]);
-const emit = defineEmits(["openMobileSidebar"]);
+const emit = defineEmits(["toggleSidebar"]);
 
 function handleEscape(event) {
   if (event.key === "Escape" && props.isOpen) {
-    emit("openMobileSidebar");
+    emit("toggleSidebar");
   }
 }
 
@@ -139,7 +139,7 @@ onUnmounted(() => {
       leave-from-class="opacity-100"
       leave-to-class="opacity-0"
   >
-    <MobileSideBarOverlay v-show="isOpen" @click="$emit('openMobileSidebar')" />
+    <MobileSideBarOverlay v-show="isOpen" @click="$emit('toggleSidebar')" />
   </transition>
   <transition
       enter-active-class="transition ease-in-out duration-200 transform"
@@ -156,7 +156,7 @@ onUnmounted(() => {
         tabindex="-1"
     >
       <section class="flex items-center p-4 border-b sticky top-0 bg-white">
-        <button class="ml-2 mr-6 focus:outline-none" @click="$emit('openMobileSidebar')">
+        <button class="ml-2 mr-6 focus:outline-none" @click="$emit('toggleSidebar')">
           <BaseIcon icon="menu" />
         </button>
         <Logo/>
