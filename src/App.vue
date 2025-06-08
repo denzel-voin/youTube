@@ -1,42 +1,114 @@
 <template>
   <Header @toggle-sidebar="toggleSidebar" />
-  <SideBarSmall :isOpen="sideBarState === 'compact'" />
-  <SideBar :isOpen="sideBarState === 'normal'" />
+  <SideBarCompact v-if="isCompactSidebarOpen" />
+  <SideBar v-if="isSidebarOpen" />
   <MobileSideBar @toggle-sidebar="toggleSidebar" :isOpen="isMobileSidebarOpen" />
-  <Categories :isOpen="sideBarState === 'normal'" />
-  <MainContent :isOpen="sideBarState === 'normal'"  />
+  <Categories :isOpen="isSidebarOpen" />
+  <MainContent :isOpen="isSidebarOpen"  />
 </template>
 <script>
 import Header from "./components/Header/Header.vue";
-import SideBarSmall from "./components/SideBar/SmallSidebar/SideBarSmall.vue";
+import SideBarCompact from "./components/SideBar/SideBarCompact/SideBarCompact.vue";
 import SideBar from "./components/SideBar/SideBar.vue";
 import MobileSideBar from "./components/SideBar/MobileSideBar/MobileSideBar.vue";
 import MainContent from "./components/MainContent.vue";
 import Categories from "./components/Categories.vue";
-import {defineComponent, onMounted, ref} from "vue";
+import {defineComponent, onBeforeUnmount, onMounted, ref} from "vue";
 
 export default defineComponent({
-  components: {Header, MainContent, MobileSideBar, SideBar, SideBarSmall, Categories},
+  components: {Header, MainContent, MobileSideBar, SideBar, SideBarCompact, Categories},
   setup() {
+    const isCompactSidebarActive = ref(false);
     const isMobileSidebarOpen = ref(false);
-    const sideBarState = ref('');
+    const isCompactSidebarOpen = ref(false);
+    const isSidebarOpen = ref(false);
+
+    let resizeObserver = null;
+    let lastWidth = 0;
+    let debounceTimeout = null;
 
     const toggleSidebar = () => {
-      if (window.innerWidth >= 1280) {
-        sideBarState.value = sideBarState.value === 'normal' ? 'compact' : 'normal';
-      } else isMobileSidebarOpen.value = !isMobileSidebarOpen.value;
+      if (document.documentElement.clientWidth >= 1280) {
+        isCompactSidebarActive.value = !isCompactSidebarActive.value;
+        updateSidebarState(null, true);
+      } else {
+        isMobileSidebarOpen.value = !isMobileSidebarOpen.value;
+      }
+    };
+
+    const updateSidebarState = (width = null, force = false) => {
+      const currentWidth = width || document.documentElement.clientWidth;
+
+      if (!force && Math.abs(currentWidth - lastWidth) < 5) {
+        return;
+      }
+
+      lastWidth = currentWidth;
+
+      if (currentWidth < 768) {
+        isCompactSidebarOpen.value = false;
+        isSidebarOpen.value = false;
+      } else if (currentWidth < 1280) {
+        isCompactSidebarOpen.value = true;
+        isSidebarOpen.value = false;
+      } else {
+        isCompactSidebarOpen.value = isCompactSidebarActive.value;
+        isSidebarOpen.value = !isCompactSidebarActive.value;
+      }
+    };
+
+    const debouncedUpdate = (width) => {
+      if (debounceTimeout) {
+        clearTimeout(debounceTimeout);
+      }
+      debounceTimeout = setTimeout(() => {
+        updateSidebarState(width);
+      }, 100);
     };
 
     onMounted(() => {
-      if(window.innerWidth >= 768 && window.innerWidth <= 1280) {
-        sideBarState.value = 'compact';
+      const initialWidth = document.documentElement.clientWidth;
+      lastWidth = initialWidth;
+
+      if (initialWidth >= 768 && initialWidth <= 1280) {
+        isCompactSidebarActive.value = true;
       }
-      if (window.innerWidth > 1280) {
-        sideBarState.value = 'normal';
+      if (initialWidth > 1280) {
+        isCompactSidebarActive.value = false;
       }
-    })
-    return {toggleSidebar, isMobileSidebarOpen, sideBarState}
+
+      // Используем ResizeObserver для более точного отслеживания
+      if (window.ResizeObserver) {
+        resizeObserver = new ResizeObserver((entries) => {
+          for (const entry of entries) {
+            const width = entry.contentRect.width;
+            debouncedUpdate(width);
+          }
+        });
+
+        resizeObserver.observe(document.documentElement);
+      } else {
+        // Fallback для старых браузеров
+        const fallbackResize = () => {
+          const width = document.documentElement.clientWidth;
+          debouncedUpdate(width);
+        };
+        window.addEventListener("resize", fallbackResize);
+      }
+
+      updateSidebarState(initialWidth);
+    });
+
+    onBeforeUnmount(() => {
+      if (resizeObserver) {
+        resizeObserver.disconnect();
+      }
+      if (debounceTimeout) {
+        clearTimeout(debounceTimeout);
+      }
+    });
+
+    return {toggleSidebar, isMobileSidebarOpen, isCompactSidebarOpen, isSidebarOpen}
   }
 })
-
 </script>

@@ -31,7 +31,7 @@ export default {
 
 <template>
   <section :class="classes">
-    <div class="border-t border-b px-4 max-w-screen-2xl m-auto">
+    <div class="border-t border-b px-4">
       <div class="py-3 flex space-x-3 overflow-auto text-sm whitespace-nowrap">
         <CategoryItem v-for="category in categories"
                       :key="category"

@@ -100,12 +100,7 @@ const lists = [
   }
 ]
 
-const {isOpen} = defineProps({
-  isOpen: Boolean,
-})
-
 const classes = computed(() => [
-  isOpen ? 'xl:block' : 'hidden',
   'overflow-auto',
   'w-64',
   'fixed',
