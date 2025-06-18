@@ -54,6 +54,7 @@ export default defineComponent({
       } else {
         isCompactSidebarOpen.value = isCompactSidebarActive.value;
         isSidebarOpen.value = !isCompactSidebarActive.value;
+        isMobileSidebarOpen.value = false;
       }
     };
 
@@ -77,7 +78,6 @@ export default defineComponent({
         isCompactSidebarActive.value = false;
       }
 
-      // Используем ResizeObserver для более точного отслеживания
       if (window.ResizeObserver) {
         resizeObserver = new ResizeObserver((entries) => {
           for (const entry of entries) {
@@ -88,7 +88,6 @@ export default defineComponent({
 
         resizeObserver.observe(document.documentElement);
       } else {
-        // Fallback для старых браузеров
         const fallbackResize = () => {
           const width = document.documentElement.clientWidth;
           debouncedUpdate(width);
