@@ -41,14 +41,8 @@ export default defineComponent({
       <button class="sm:hidden p-2 focus:outline-none">
         <BaseIcon icon="search" class="w-5 h-5" />
       </button>
-      <button class="relative group p-2 focus:outline-none">
-        <BaseIcon icon="squares" class="w-5 h-5" />
-        <DropdownApps/>
-      </button>
-      <button class="relative group p-2 focus:outline-none">
-        <BaseIcon icon="dots" class="w-5 h-5" />
-        <DropdownSettings />
-      </button>
+      <DropdownApps/>
+      <DropdownSettings />
       <ButtonLogin />
     </div>
   </header>
