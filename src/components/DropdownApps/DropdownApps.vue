@@ -6,24 +6,30 @@ import {onBeforeUnmount, onMounted, ref} from "vue";
 const isOpen = ref(false);
 const dropdownRef = ref(null);
 
-const handleClickOutside = (event) => {
+const handleClick = (event) => {
   if (dropdownRef.value && !dropdownRef.value.contains(event.target)) {
     isOpen.value = false;
+  } else if (event.key === "Escape") {
+    isOpen.value = false;
+  } else {
+    isOpen.value = !isOpen.value;
   }
 };
 
 onMounted(() => {
-  window.addEventListener('click', handleClickOutside);
+  window.addEventListener('click', handleClick);
+  window.addEventListener('keydown', handleClick);
 });
 
 onBeforeUnmount(() => {
-  window.removeEventListener('click', handleClickOutside);
+  window.removeEventListener('click', handleClick);
+  window.removeEventListener('keydown', handleClick);
 });
 </script>
 
 <template>
   <div class="relative" ref="dropdownRef">
-    <button class="group p-2 focus:outline-none cursor-pointer" @click="isOpen = !isOpen">
+    <button class="group p-2 focus:outline-none cursor-pointer" @click="() => handleClick">
       <BaseIcon icon="squares" class="w-5 h-5" />
     </button>
     <transition
