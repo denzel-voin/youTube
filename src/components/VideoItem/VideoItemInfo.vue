@@ -1,9 +1,10 @@
 <script>
 import BaseIcon from "../../UI/BaseIcon.vue";
 import {computed} from "vue";
+import VideoItemDropdown from "./VideoItemDropdown.vue";
 
 export default {
-  components: {BaseIcon},
+  components: {VideoItemDropdown, BaseIcon},
   props: {
     index: Number,
   },
@@ -29,9 +30,7 @@ export default {
         <span>{{index}} {{dayCounts}} ago</span>
       </div>
     </div>
-    <button class="-mt-1 ml-auto p-1 opacity-0 group-hover:opacity-100 text-gray-500 hover:text-gray-700 focus:outline-none">
-      <BaseIcon icon="dots" />
-    </button>
+    <VideoItemDropdown />
   </div>
 </template>
 
