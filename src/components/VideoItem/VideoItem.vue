@@ -12,7 +12,7 @@ export default {
 </script>
 
 <template>
-  <a href="#" class="mb-7 group">
+  <a class="mb-7 group">
     <VideoItemThumbnail :index="index" />
     <VideoItemInfo :index="index" />
   </a>
