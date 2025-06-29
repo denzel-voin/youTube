@@ -2,6 +2,7 @@
 import DropdownSettingItem from "./DropdownSettingItem.vue";
 import BaseIcon from "../../UI/BaseIcon.vue";
 import {onBeforeUnmount, onMounted, ref} from "vue";
+import BaseTooltip from "../../UI/BaseTooltip.vue";
 
 const settingsList = [
   {
@@ -85,9 +86,11 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="relative" ref="dropdownRef">
-    <button class="group p-2 focus:outline-none cursor-pointer" @click="() => handleClick">
-      <BaseIcon icon="dots" class="w-5 h-5" />
-    </button>
+    <BaseTooltip title="Настройки">
+      <button class="group p-2 focus:outline-none cursor-pointer" @click="() => handleClick">
+        <BaseIcon icon="dots" class="w-5 h-5" />
+      </button>
+    </BaseTooltip>
     <transition
         enter-active-class="transition ease-out duration-100"
         enter-from-class="transition opacity-0 scale-95"

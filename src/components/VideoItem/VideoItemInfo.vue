@@ -2,9 +2,10 @@
 import BaseIcon from "../../UI/BaseIcon.vue";
 import {computed} from "vue";
 import VideoItemDropdown from "./VideoItemDropdown.vue";
+import BaseTooltip from "../../UI/BaseTooltip.vue";
 
 export default {
-  components: {VideoItemDropdown, BaseIcon},
+  components: {BaseTooltip, VideoItemDropdown, BaseIcon},
   props: {
     index: Number,
   },
@@ -21,8 +22,12 @@ export default {
     <div class="text-sm">
       <span class="font-semibold text-gray-800">Video title</span>
       <div class="mt-1 flex items-center">
-        <span>Channel name</span>
-        <BaseIcon icon="check" class="w-3.5 h-3.5 ml-1" />
+        <BaseTooltip is-for-top title="Название канала">
+          <span class="cursor-pointer">Channel name</span>
+        </BaseTooltip>
+        <BaseTooltip is-for-top title="Подтверждено">
+          <BaseIcon icon="check" class="w-3.5 h-3.5 ml-1 cursor-pointer" />
+        </BaseTooltip>
       </div>
       <div>
         <span>1K views</span>

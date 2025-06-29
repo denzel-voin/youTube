@@ -4,14 +4,14 @@ import {computed, ref} from "vue";
 const props = defineProps({
   title: {
     type: String
+  },
+  isForTop: {
+    type: Boolean,
+    default: false
   }
 })
 
 const isShow = ref(false);
-
-const toggle = () => {
-  isShow.value = !isShow.value;
-}
 
 const classes = computed(() => {
   return [
@@ -22,24 +22,24 @@ const classes = computed(() => {
     'whitespace-nowrap',
     'p-2',
     'absolute',
-    'top-14',
     'left-1/2',
     'transform',
-    '-translate-1/2'
+    '-translate-1/2',
+    props.isForTop ? '-top-4' : 'top-14'
   ]
 });
 </script>
 
 <template>
   <div class="relative">
-    <div @mouseenter="toggle" @mouseleave="toggle" class="h-full">
+    <div @mouseenter="isShow = true" @mouseleave="isShow = false" class="h-full" @click="isShow = false">
       <slot></slot>
     </div>
     <transition
-        enter-active-class="transition-opacity ease-linear duration-200"
+        enter-active-class="duration-200"
         enter-from-class="opacity-0"
         enter-to-class="opacity-100"
-        leave-active-class="transition-opacity ease-linear duration-200"
+        leave-active-class="duration-75"
         leave-from-class="opacity-100"
         leave-to-class="opacity-0"
     >

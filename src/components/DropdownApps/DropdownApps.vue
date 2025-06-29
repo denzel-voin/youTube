@@ -2,6 +2,7 @@
 import DropdownListItem from "./DropdownListItem.vue";
 import BaseIcon from "../../UI/BaseIcon.vue";
 import {onBeforeUnmount, onMounted, ref} from "vue";
+import BaseTooltip from "../../UI/BaseTooltip.vue";
 
 const isOpen = ref(false);
 const dropdownRef = ref(null);
@@ -29,9 +30,11 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="relative" ref="dropdownRef">
-    <button class="group p-2 focus:outline-none cursor-pointer" @click="() => handleClick">
-      <BaseIcon icon="squares" class="w-5 h-5" />
-    </button>
+    <BaseTooltip title="Приложения">
+      <button class="group p-2 focus:outline-none cursor-pointer" @click="() => handleClick">
+        <BaseIcon icon="squares" class="w-5 h-5" />
+      </button>
+    </BaseTooltip>
     <transition
         enter-active-class="transition ease-out duration-100"
         enter-from-class="transition opacity-0 scale-95"
@@ -42,7 +45,7 @@ onBeforeUnmount(() => {
     >
       <div
           v-show="isOpen"
-          class="absolute top-9 right-0 sm:left-0 bg-white w-60 border border-t-0 border-gray-300">
+          class="z-10 absolute top-9 right-0 sm:left-0 bg-white w-60 border border-t-0 border-gray-300">
         <section class="py-2 border-b border-gray-300">
           <ul>
             <DropdownListItem label="NewTube TV" />
