@@ -1,24 +1,27 @@
 <script setup>
 import DropdownSettingItem from "./DropdownSettingItem.vue";
-
+const emit = defineEmits(["select-item"]);
 const settingsList = [
   {
     label: 'Тема: Светлая',
     arrow: true,
     id: 1,
-    icon: 'sun'
+    icon: 'sun',
+    title: 'appearance'
   },
   {
     label: 'Язык: Русский',
     arrow: true,
     id: 2,
-    icon: 'lang'
+    icon: 'lang',
+    title: 'language'
   },
   {
-    label: 'Локация: Москва',
+    label: 'Локация: Россия',
     arrow: true,
     id: 3,
-    icon: 'location'
+    icon: 'location',
+    title: 'location'
   },
   {
     label: 'Настройки',
@@ -63,7 +66,7 @@ const settingsList = [
       <DropdownSettingItem
           v-for="item in settingsList.slice(0, settingsList.length - 2)"
           :key="item.id" :item="item"
-          @click.stop="$emit('select-item', 'appearance')"
+          @click.stop="emit('select-item', item.title)"
           :icon="item.icon"
           :is-active="false"
       />

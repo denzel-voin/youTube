@@ -4,6 +4,8 @@ import BaseIcon from "../../UI/BaseIcon.vue";
 import BaseTooltip from "../../UI/BaseTooltip.vue";
 import DropDownSettingsMain from "./DropDownSettingsMain.vue";
 import DropDownSettingsMainAppearance from "./DropDownSettingsMainAppearance.vue";
+import DropdownSettingsLanguage from "./DropdownSettingsLanguage.vue";
+import DropdownLocation from "./DropdownLocation.vue";
 
 const isOpen = ref(false);
 const dropdownRef = ref(null);
@@ -74,6 +76,14 @@ onBeforeUnmount(() => {
         <DropDownSettingsMainAppearance
             v-else-if="isSelectedMenu === 'appearance'"
             @select-item="showSelectedMenu"
+        />
+        <DropdownSettingsLanguage
+        v-else-if="isSelectedMenu === 'language'"
+        @select-item="showSelectedMenu"
+        />
+        <DropdownLocation
+        v-else-if="isSelectedMenu === 'location'"
+        @select-item="showSelectedMenu"
         />
       </div>
     </transition>

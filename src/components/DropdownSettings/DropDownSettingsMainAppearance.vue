@@ -1,7 +1,9 @@
 <script setup>
 import DropdownSettingItem from "./DropdownSettingItem.vue";
-import BaseIcon from "../../UI/BaseIcon.vue";
 import {ref} from "vue";
+import DropdownSettingsHeader from "./DropdownSettingsHeader.vue";
+
+const emit = defineEmits(["select-item"]);
 
 const settingsList = [
   {
@@ -22,14 +24,7 @@ const selectedId = ref(0);
 </script>
 
 <template>
-  <section class="border-b border-gray-300 flex gap-2 text-black">
-    <button class="px-3 focus:outline-none cursor-pointer" @click.stop="$emit('select-item', 'main')">
-      <BaseIcon icon="arrowLeft" />
-    </button>
-    <span class="py-3">
-      Цветовая тема
-    </span>
-  </section>
+  <DropdownSettingsHeader title="Цветовая тема" @back="emit('select-item', 'main')" />
   <section class="py-2 border-b border-gray-300">
     <div class="text-gray-500 text-xs px-3 py-1">Настройки применятся к текущему браузеру</div>
     <ul>
