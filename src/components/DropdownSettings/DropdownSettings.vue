@@ -1,11 +1,12 @@
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from "vue";
+import {onBeforeUnmount, onMounted, ref} from "vue";
 import BaseIcon from "../../UI/BaseIcon.vue";
 import BaseTooltip from "../../UI/BaseTooltip.vue";
 import DropDownSettingsMain from "./DropDownSettingsMain.vue";
 import DropDownSettingsMainAppearance from "./DropDownSettingsMainAppearance.vue";
 import DropdownSettingsLanguage from "./DropdownSettingsLanguage.vue";
 import DropdownLocation from "./DropdownLocation.vue";
+import DropdownRestricted from "./DropdownRestricted.vue";
 
 const isOpen = ref(false);
 const dropdownRef = ref(null);
@@ -53,7 +54,7 @@ onBeforeUnmount(() => {
   <div class="relative" ref="dropdownRef">
     <BaseTooltip title="Настройки">
       <button class="group p-2 focus:outline-none cursor-pointer" @click="toggleDropdown">
-        <BaseIcon icon="dots" class="w-5 h-5" />
+        <BaseIcon icon="dots" class="w-5 h-5"/>
       </button>
     </BaseTooltip>
 
@@ -78,12 +79,16 @@ onBeforeUnmount(() => {
             @select-item="showSelectedMenu"
         />
         <DropdownSettingsLanguage
-        v-else-if="isSelectedMenu === 'language'"
-        @select-item="showSelectedMenu"
+            v-else-if="isSelectedMenu === 'language'"
+            @select-item="showSelectedMenu"
         />
         <DropdownLocation
-        v-else-if="isSelectedMenu === 'location'"
-        @select-item="showSelectedMenu"
+            v-else-if="isSelectedMenu === 'location'"
+            @select-item="showSelectedMenu"
+        />
+        <DropdownRestricted
+            v-else-if="isSelectedMenu === 'restricted'"
+            @select-item="showSelectedMenu"
         />
       </div>
     </transition>

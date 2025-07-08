@@ -54,8 +54,11 @@ const settingsList = [
     icon: 'shortcats'
   },
   {
-    label: 'Ограничения: выключены',
+    label: 'Безопасный режим: откл.',
+    id: 9,
     arrow: true,
+    icon: 'shield',
+    title: 'restricted'
   }
 ];
 </script>
@@ -74,7 +77,11 @@ const settingsList = [
   </section>
   <section class="py-2">
     <ul>
-      <DropdownSettingItem :item="settingsList[settingsList.length - 1]" />
+      <DropdownSettingItem
+          :item="settingsList[settingsList.length - 1]"
+          :icon="settingsList[settingsList.length - 1].icon"
+          @click.stop="emit('select-item', settingsList[settingsList.length - 1].title)"
+      />
     </ul>
   </section>
 </template>
