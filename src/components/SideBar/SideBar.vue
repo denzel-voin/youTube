@@ -108,6 +108,8 @@ const classes = computed(() => [
   'pt-12',
   'bg-white',
   'z-20',
+  'border-r-1',
+  'border-black/20'
 ])
 
 </script>

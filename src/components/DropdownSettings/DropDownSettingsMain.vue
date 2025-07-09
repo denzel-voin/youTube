@@ -1,9 +1,11 @@
 <script setup>
 import DropdownSettingItem from "./DropdownSettingItem.vue";
+import {useThemeStore} from "../../stores.js";
+const themeStore = useThemeStore()
 const emit = defineEmits(["select-item"]);
 const settingsList = [
   {
-    label: 'Тема: Светлая',
+    label: `Тема: ${themeStore.themeState}`,
     arrow: true,
     id: 1,
     icon: 'sun',
@@ -61,6 +63,12 @@ const settingsList = [
     title: 'restricted'
   }
 ];
+
+const selectMenu = (item) => {
+  if (item.arrow) {
+    emit('select-item', item.title);
+  }
+}
 </script>
 
 <template>
@@ -69,7 +77,7 @@ const settingsList = [
       <DropdownSettingItem
           v-for="item in settingsList.slice(0, settingsList.length - 2)"
           :key="item.id" :item="item"
-          @click.stop="emit('select-item', item.title)"
+          @click.stop="selectMenu(item)"
           :icon="item.icon"
           :is-active="false"
       />
@@ -80,7 +88,7 @@ const settingsList = [
       <DropdownSettingItem
           :item="settingsList[settingsList.length - 1]"
           :icon="settingsList[settingsList.length - 1].icon"
-          @click.stop="emit('select-item', settingsList[settingsList.length - 1].title)"
+          @click.stop="selectMenu(settingsList[settingsList.length - 1])"
       />
     </ul>
   </section>
