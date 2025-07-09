@@ -1,5 +1,5 @@
 <script setup>
-import {onBeforeUnmount, onMounted, ref} from "vue";
+import {computed, onBeforeUnmount, onMounted, ref} from "vue";
 import BaseIcon from "../../UI/BaseIcon.vue";
 import BaseTooltip from "../../UI/BaseTooltip.vue";
 import DropDownSettingsMain from "./DropDownSettingsMain.vue";
@@ -39,6 +39,17 @@ const handleKeydown = (event) => {
   }
 };
 
+const menu = computed(() => {
+  const menuList = {
+    main: DropDownSettingsMain,
+    appearance: DropDownSettingsMainAppearance,
+    language: DropdownSettingsLanguage,
+    location: DropdownLocation,
+    restricted: DropdownRestricted,
+  }
+  return menuList[isSelectedMenu.value];
+})
+
 onMounted(() => {
   document.addEventListener("mousedown", handleClickOutside);
   document.addEventListener("keydown", handleKeydown);
@@ -70,26 +81,7 @@ onBeforeUnmount(() => {
           v-show="isOpen"
           class="absolute top-9 -right-full sm:right-0 bg-white w-72 border border-t-0 border-gray-300"
       >
-        <DropDownSettingsMain
-            v-if="isSelectedMenu === 'main'"
-            @select-item="showSelectedMenu"
-        />
-        <DropDownSettingsMainAppearance
-            v-else-if="isSelectedMenu === 'appearance'"
-            @select-item="showSelectedMenu"
-        />
-        <DropdownSettingsLanguage
-            v-else-if="isSelectedMenu === 'language'"
-            @select-item="showSelectedMenu"
-        />
-        <DropdownLocation
-            v-else-if="isSelectedMenu === 'location'"
-            @select-item="showSelectedMenu"
-        />
-        <DropdownRestricted
-            v-else-if="isSelectedMenu === 'restricted'"
-            @select-item="showSelectedMenu"
-        />
+        <component :is="menu" @select-item="showSelectedMenu" />
       </div>
     </transition>
   </div>
