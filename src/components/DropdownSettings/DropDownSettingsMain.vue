@@ -1,7 +1,7 @@
 <script setup>
 import DropdownSettingItem from "./DropdownSettingItem.vue";
-import {useThemeStore} from "../../stores.js";
-const themeStore = useThemeStore()
+import {useOptionsStore} from "../../stores.js";
+const themeStore = useOptionsStore()
 const emit = defineEmits(["select-item"]);
 const settingsList = [
   {
@@ -12,14 +12,14 @@ const settingsList = [
     title: 'appearance'
   },
   {
-    label: 'Язык: Русский',
+    label: `Язык: ${themeStore.languageState}`,
     arrow: true,
     id: 2,
     icon: 'lang',
     title: 'language'
   },
   {
-    label: 'Локация: Россия',
+    label: `Локация: ${themeStore.locationState}`,
     arrow: true,
     id: 3,
     icon: 'location',
@@ -56,7 +56,7 @@ const settingsList = [
     icon: 'shortcats'
   },
   {
-    label: 'Безопасный режим: откл.',
+    label: `Безопасный режим: ${themeStore.restrictedState}`,
     id: 9,
     arrow: true,
     icon: 'shield',

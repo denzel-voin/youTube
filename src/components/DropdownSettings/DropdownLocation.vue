@@ -1,21 +1,30 @@
 <script setup>
-import {ref} from "vue";
+import {ref, watch} from "vue";
+import { useOptionsStore } from "../../stores.js"
+import { storeToRefs } from "pinia"
+import DropdownSettingsHeader from "./DropdownSettingsHeader.vue";
+import DropdownSettingItem from "./DropdownSettingItem.vue";
 
+const locationStore = useOptionsStore()
+const { locationState } = storeToRefs(locationStore)
 const emit = defineEmits(['select-item']);
+
 const locationList = [
   {
     label: 'Россия',
-    id: 1
+    id: 0
   },
   {
     label: 'США',
-    id: 2
+    id: 1
   }
 ]
 
-const selectedId = ref(0);
-import DropdownSettingsHeader from "./DropdownSettingsHeader.vue";
-import DropdownSettingItem from "./DropdownSettingItem.vue";
+const selectedId = ref(locationList.findIndex(locate => locate.label === locationState.value));
+
+watch(selectedId, (id) => {
+  locationState.value = locationList[id].label;
+})
 </script>
 <template>
   <DropdownSettingsHeader title="Локация" @back="emit('select-item', 'main')"/>

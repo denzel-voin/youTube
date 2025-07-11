@@ -2,11 +2,17 @@
 import {computed, ref} from "vue";
 import DropdownSettingsHeader from "./DropdownSettingsHeader.vue";
 import BasicToggleSwitch from '../../UI/BaseSwitch.vue';
+import { useOptionsStore } from "../../stores.js"
+import { storeToRefs } from "pinia"
+
+const restrictedStore = useOptionsStore()
+const { restrictedState } = storeToRefs(restrictedStore)
 
 const emit = defineEmits(['select-item']);
-const switchValue = ref(false);
+const switchValue = ref(restrictedState.value === 'вкл');
 
 const switchValueText = computed(() => {
+  restrictedState.value = switchValue.value ? 'вкл' : 'выкл';
   return switchValue.value ? 'вкл' : 'выкл';
 })
 </script>

@@ -1,21 +1,30 @@
 <script setup>
-import {ref} from "vue";
+import {ref, watch} from "vue";
 import DropdownSettingsHeader from "./DropdownSettingsHeader.vue";
 import DropdownSettingItem from "./DropdownSettingItem.vue";
+import { useOptionsStore } from "../../stores.js"
+import { storeToRefs } from "pinia"
+
+const langStore = useOptionsStore()
+const { languageState } = storeToRefs(langStore)
 
 const emit = defineEmits(['select-item']);
 const languageList = [
   {
     label: 'Русский',
-    id: 1
+    id: 0
   },
   {
     label: 'English',
-    id: 2
+    id: 1
   }
 ]
 
-const selectedId = ref(0);
+const selectedId = ref(languageList.findIndex(lang => lang.label === languageState.value));
+
+watch(selectedId, (id) => {
+  languageState.value = languageList[id].label;
+})
 </script>
 
 <template>

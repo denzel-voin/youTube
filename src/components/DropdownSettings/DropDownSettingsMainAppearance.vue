@@ -2,7 +2,7 @@
 import DropdownSettingItem from './DropdownSettingItem.vue'
 import DropdownSettingsHeader from './DropdownSettingsHeader.vue'
 import { ref, watch } from 'vue'
-import { useThemeStore } from "../../stores.js"
+import { useOptionsStore } from "../../stores.js"
 import { storeToRefs } from "pinia"
 
 const emit = defineEmits(['select-item'])
@@ -13,7 +13,7 @@ const settingsList = [
   { label: 'Светлая тема', id: 3 }
 ]
 
-const themeStore = useThemeStore()
+const themeStore = useOptionsStore()
 const { themeState } = storeToRefs(themeStore)
 
 const labelToId = {
