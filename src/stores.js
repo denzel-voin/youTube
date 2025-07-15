@@ -19,7 +19,7 @@ export const useOptionsStore = defineStore('theme', () => {
     const savedLocation = localStorage.getItem('locationState');
     const locationState = ref(savedLocation || 'Россия');
 
-    watch(languageState, (newValue) => {
+    watch(locationState, (newValue) => {
         localStorage.setItem('locationState', newValue)
     })
 
