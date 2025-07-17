@@ -28,17 +28,28 @@ const keywords = [
 ];
 
 const query = ref('');
+const isSearchInputFocus = ref(false);
+
+const trimmedQuery = computed(() => query.value.replace(/\s+/g, ' ').trim());
 
 const results = computed(() => {
-  return keywords.filter(keyword => keyword.includes(query.value));
-})
+  return keywords.filter(keyword => keyword.includes(trimmedQuery.value));
+});
+
+const changeState = (state) => {
+  isSearchInputFocus.value = state;
+}
+
 </script>
 
 <template>
   <div class="flex w-full h-full mr-2">
     <div class="relative flex w-full">
-      <TheSearchInput v-model:query="query"/>
-      <TheSearchResults v-show="query" :results="results"/>
+      <TheSearchInput
+          v-model:query="query"
+          @change-state="changeState"
+      />
+      <TheSearchResults v-show="query.length && isSearchInputFocus" :results="results"/>
     </div>
     <TheSearchButton/>
   </div>
