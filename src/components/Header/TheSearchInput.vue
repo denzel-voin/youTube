@@ -2,9 +2,7 @@
 import {onMounted, ref} from 'vue'
 import BaseIcon from "../../UI/BaseIcon.vue";
 
-const props = defineProps({
-  query: String,
-})
+const props = defineProps(["query"]);
 
 const emits = defineEmits(["update:query", "change-state"]);
 

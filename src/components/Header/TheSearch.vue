@@ -2,7 +2,7 @@
 import TheSearchInput from "./TheSearchInput.vue";
 import TheSearchButton from "./TheSearchButton.vue";
 import TheSearchResults from "./TheSearchResults.vue";
-import {computed, ref} from "vue";
+import {computed, ref, watch} from "vue";
 
 const keywords = [
   "лунный камень",
@@ -27,10 +27,13 @@ const keywords = [
   "скрытая угроза"
 ];
 
-const query = ref('');
+const props = defineProps(["query"]);
+const localQuery = ref(props.query);
 const isSearchInputFocus = ref(false);
 
-const trimmedQuery = computed(() => query.value.replace(/\s+/g, ' ').trim());
+const emits = defineEmits(["updateQuery"]);
+
+const trimmedQuery = computed(() => localQuery.value.replace(/\s+/g, ' ').trim());
 
 const results = computed(() => {
   return keywords.filter(keyword => keyword.includes(trimmedQuery.value));
@@ -40,16 +43,26 @@ const changeState = (state) => {
   isSearchInputFocus.value = state;
 }
 
+watch(() => props.query, (newVal) => {
+  if (newVal !== localQuery.value) {
+    localQuery.value = newVal;
+  }
+});
+
+watch(localQuery, (newVal) => {
+  emits("updateQuery", newVal);
+});
+
 </script>
 
 <template>
   <div class="flex w-full h-full mr-2">
     <div class="relative flex w-full">
       <TheSearchInput
-          v-model:query="query"
+          v-model:query="localQuery"
           @change-state="changeState"
       />
-      <TheSearchResults v-show="query.length && isSearchInputFocus" :results="results"/>
+      <TheSearchResults v-show="localQuery.length && isSearchInputFocus" :results="results"/>
     </div>
     <TheSearchButton/>
   </div>

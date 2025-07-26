@@ -3,18 +3,13 @@ const props = defineProps(["query"]);
 const emits = defineEmits(["updateQuery"]);
 
 import BaseIcon from "../../UI/BaseIcon.vue";
-import TheSearch from "./TheSearch.vue";
 import BaseTooltip from "../../UI/BaseTooltip.vue";
+import TheSearch from "./TheSearch.vue";
 </script>
 
 <template>
   <div
-      class="fixed bg-white w-full flex h-14 p-3 z-10">
-    <BaseTooltip title="Назад">
-      <button class="cursor-pointer focus:outline-none mr-2" @click="$emit('close')" >
-        <BaseIcon icon="arrowLeft" />
-      </button>
-    </BaseTooltip>
+      class="hidden sm:flex items-center justify-end p-2.5 pl-8 md:pl-12 md:px-8 flex-1 lg:px-0 lg:w-1/2 max-w-screen-md">
     <TheSearch :query="props.query" @update-query="emits('updateQuery', $event)" />
     <BaseTooltip title="Голосовой поиск">
       <button class="h-full cursor-pointer p-2 focus:outline-none">
