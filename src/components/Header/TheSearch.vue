@@ -2,7 +2,7 @@
 import TheSearchInput from "./TheSearchInput.vue";
 import TheSearchButton from "./TheSearchButton.vue";
 import TheSearchResults from "./TheSearchResults.vue";
-import {computed, ref, watch} from "vue";
+import {computed, onBeforeUnmount, onMounted, ref, watch} from "vue";
 
 const keywords = [
   "лунный камень",
@@ -61,6 +61,15 @@ const incrementResult = () => {
   localQuery.value = results.value[activeSearchResult.value];
 }
 
+const handleClick = () => {
+  changeState(false);
+}
+
+const selectClickResult = (id) => {
+  localQuery.value = results.value[id];
+  updateResults();
+}
+
 watch(() => props.query, (newVal) => {
   if (newVal !== localQuery.value) {
     localQuery.value = newVal;
@@ -70,6 +79,14 @@ watch(() => props.query, (newVal) => {
 watch(localQuery, (newVal) => {
   emits("updateQuery", newVal);
 });
+
+onMounted(() => {
+  document.addEventListener('click', handleClick)
+})
+
+onBeforeUnmount(() => {
+  document.removeEventListener('click', handleClick)
+})
 
 </script>
 
@@ -87,6 +104,9 @@ watch(localQuery, (newVal) => {
       <TheSearchResults
           v-show="localQuery && isSearchInputFocus" :results="results"
           :activeSearchResult="activeSearchResult"
+          @search-mouse-enter="activeSearchResult = $event"
+          @search-mouse-leave="activeSearchResult = null"
+          @select-search-result="selectClickResult($event)"
       />
     </div>
     <TheSearchButton/>

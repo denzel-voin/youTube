@@ -28,8 +28,7 @@ const clear = () => {
 <template>
   <div class="relative flex w-full">
     <input
-        @focus="emits('change-state', true)"
-        @blur="emits('change-state', false)"
+        @click.stop="emits('change-state', true)"
         @keyup.esc="emits('change-state', false)"
         :value="query"
         @input="updateQuery($event.target.value)"
