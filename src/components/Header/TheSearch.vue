@@ -31,27 +31,34 @@ const props = defineProps(["query"]);
 const localQuery = ref(props.query);
 const isSearchInputFocus = ref(false);
 const activeSearchResult = ref(null);
+const results = ref([]);
 
 const emits = defineEmits(["updateQuery"]);
 
 const trimmedQuery = computed(() => localQuery.value.replace(/\s+/g, ' ').trim());
 
-const results = computed(() => {
-  return keywords.filter(keyword => keyword.includes(trimmedQuery.value));
-});
+const updateResults = () => {
+  activeSearchResult.value = null;
+  if (localQuery.value === '') results.value = [];
+  else results.value = keywords.filter(keyword => keyword.includes(trimmedQuery.value));
+};
 
 const changeState = (state) => {
   isSearchInputFocus.value = state;
 }
 
 const decrementResult = () => {
-  if (activeSearchResult.value === null) return activeSearchResult.value = results.value.length - 1;
-  return activeSearchResult.value === 0 ? activeSearchResult.value = results.value.length - 1 : activeSearchResult.value -= 1;
+  if (activeSearchResult.value === null) activeSearchResult.value = results.value.length - 1;
+  else if (activeSearchResult.value === 0) activeSearchResult.value = results.value.length - 1;
+  else activeSearchResult.value -= 1;
+  localQuery.value = results.value[activeSearchResult.value];
 }
 
 const incrementResult = () => {
-  if (activeSearchResult.value === null) return activeSearchResult.value = 0;
-  return activeSearchResult.value < results.value.length - 1 ? activeSearchResult.value += 1 : activeSearchResult.value = 0;
+  if (activeSearchResult.value === null) activeSearchResult.value = 0;
+  else if (activeSearchResult.value < results.value.length - 1) activeSearchResult.value += 1;
+  else activeSearchResult.value = 0;
+  localQuery.value = results.value[activeSearchResult.value];
 }
 
 watch(() => props.query, (newVal) => {
@@ -71,12 +78,14 @@ watch(localQuery, (newVal) => {
     <div class="relative flex w-full">
       <TheSearchInput
           v-model:query="localQuery"
+          @update:query="updateResults"
           @change-state="changeState"
           @keyup.up="decrementResult"
           @keyup.down="incrementResult"
+          @keydown.up.prevent
       />
       <TheSearchResults
-          v-show="localQuery.length && isSearchInputFocus" :results="results"
+          v-show="localQuery && isSearchInputFocus" :results="results"
           :activeSearchResult="activeSearchResult"
       />
     </div>
