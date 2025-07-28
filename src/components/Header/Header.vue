@@ -6,15 +6,21 @@ import TheSearch from "./TheSearch.vue";
 import ButtonLogin from "../../UI/ButtonLogin.vue";
 import BaseIcon from "../../UI/BaseIcon.vue";
 import DropdownSettings from "../DropdownSettings/DropdownSettings.vue";
-import {defineComponent, onBeforeUnmount, onMounted, ref} from "vue";
+import {computed, defineComponent, onBeforeUnmount, onMounted, ref} from "vue";
 import BaseTooltip from "../../UI/BaseTooltip.vue";
-import TheSearchMobile from "./TheSearchMobile.vue";
-import TheSearchMain from "./TheSearchMain.vue";
+import TheSearchWrapper from "./TheSearchWrapper.vue";
 
 export default defineComponent({
   components: {
-    TheSearchMain,
-    TheSearchMobile, BaseTooltip, Logo, BaseIcon, ButtonLogin, TheSearch, DropdownSettings, DropdownApps
+    TheSearchWrapper,
+    TheSearchMobile: TheSearchWrapper,
+    BaseTooltip,
+    Logo,
+    BaseIcon,
+    ButtonLogin,
+    TheSearch,
+    DropdownSettings,
+    DropdownApps
   },
   emits: {
     toggleSidebar: null
@@ -40,10 +46,15 @@ export default defineComponent({
     const closeMobileSearch = () => {
       isMobileSearchActive.value = false;
     }
+
+    const isSearchShow = computed(() => {
+      return isMobileSearchActive.value || !isSmallScreen.value;
+    })
     return {
       isSmallScreen,
       searchQuery,
       isMobileSearchActive,
+      isSearchShow,
       closeMobileSearch
     }
   }
@@ -61,15 +72,12 @@ export default defineComponent({
         <Logo/>
       </div>
     </div>
-    <TheSearchMobile v-if="isSmallScreen && isMobileSearchActive" @close="closeMobileSearch"
-                     :query="searchQuery"
-                     @update-query="searchQuery = $event"
-    />
-    <TheSearchMain
-        v-else
-        :query="searchQuery"
-        @update-query="searchQuery = $event"
-    />
+    <TheSearchWrapper :is-small-screen="isSmallScreen" @close="closeMobileSearch"
+                      :query="searchQuery"
+                      v-show="isSearchShow"
+    >
+      <TheSearch :query="searchQuery" @update-query="searchQuery = $event"/>
+    </TheSearchWrapper>
     <div class="flex items-center justify-end lg:w-1/4 sm:space-x-3 p-2 sm:px-4">
       <BaseTooltip title="Голосовой поиск">
         <button class="sm:hidden p-2 focus:outline-none cursor-pointer">

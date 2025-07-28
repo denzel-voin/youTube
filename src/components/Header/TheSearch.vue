@@ -27,13 +27,10 @@ const keywords = [
   "скрытая угроза"
 ];
 
-const props = defineProps(["query"]);
-const localQuery = ref(props.query);
+const localQuery = ref('');
 const isSearchInputFocus = ref(false);
 const activeSearchResult = ref(null);
 const results = ref([]);
-
-const emits = defineEmits(["updateQuery"]);
 
 const trimmedQuery = computed(() => localQuery.value.replace(/\s+/g, ' ').trim());
 
@@ -69,16 +66,6 @@ const selectClickResult = (id) => {
   localQuery.value = results.value[id];
   updateResults();
 }
-
-watch(() => props.query, (newVal) => {
-  if (newVal !== localQuery.value) {
-    localQuery.value = newVal;
-  }
-});
-
-watch(localQuery, (newVal) => {
-  emits("updateQuery", newVal);
-});
 
 onMounted(() => {
   document.addEventListener('click', handleClick)
