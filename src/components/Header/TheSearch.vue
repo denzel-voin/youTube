@@ -100,6 +100,7 @@ onBeforeUnmount(() => {
           @keyup.up="decrementResult"
           @keyup.down="incrementResult"
           @keydown.up.prevent
+          @enter="selectClickResult(activeSearchResult)"
       />
       <TheSearchResults
           v-show="localQuery && isSearchInputFocus" :results="results"
@@ -109,7 +110,7 @@ onBeforeUnmount(() => {
           @select-search-result="selectClickResult($event)"
       />
     </div>
-    <TheSearchButton/>
+    <TheSearchButton @click="selectClickResult(activeSearchResult)" />
   </div>
 </template>
 

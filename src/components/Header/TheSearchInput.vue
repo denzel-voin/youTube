@@ -4,7 +4,7 @@ import BaseIcon from "../../UI/BaseIcon.vue";
 
 const props = defineProps(["query"]);
 
-const emits = defineEmits(["update:query", "change-state"]);
+const emits = defineEmits(["update:query", "change-state", "enter"]);
 
 const updateQuery = (query) => {
   emits('update:query', query);
@@ -23,6 +23,12 @@ const clear = () => {
   updateQuery('')
   inputRef.value?.focus()
 }
+
+const handleEnter = () => {
+  emits('change-state', false);
+  inputRef.value?.blur();
+  emits("enter");
+}
 </script>
 
 <template>
@@ -36,6 +42,7 @@ const clear = () => {
         placeholder="Введите запрос"
         ref="inputRef"
         class="w-full px-3 shadow-inner rounded-bl-sm rounded-tl-sm border border-gray-300 focus:border-blue-700 focus:outline-none"
+        @keydown.enter="handleEnter"
     >
     <button>
       <BaseIcon
