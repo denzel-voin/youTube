@@ -6,7 +6,7 @@ import TheSearch from "./TheSearch.vue";
 import ButtonLogin from "../../UI/ButtonLogin.vue";
 import BaseIcon from "../../UI/BaseIcon.vue";
 import DropdownSettings from "../DropdownSettings/DropdownSettings.vue";
-import {computed, defineComponent, onBeforeUnmount, onMounted, ref} from "vue";
+import {computed, defineComponent, onBeforeUnmount, onMounted, provide, ref} from "vue";
 import BaseTooltip from "../../UI/BaseTooltip.vue";
 import TheSearchWrapper from "./TheSearchWrapper.vue";
 
@@ -33,6 +33,8 @@ export default defineComponent({
     const onResize = () => {
       isSmallScreen.value = document.documentElement.clientWidth < 640;
     }
+
+    provide('isMobileSearchActive', computed(() => isMobileSearchActive.value));
 
     onMounted(() => {
       onResize();

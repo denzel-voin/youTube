@@ -1,17 +1,26 @@
 <script setup>
-import {onMounted, ref} from 'vue'
+import {inject, nextTick, onMounted, ref, watch} from 'vue'
 import BaseIcon from "../../UI/BaseIcon.vue";
 
 const props = defineProps(["query"]);
 
 const emits = defineEmits(["update:query", "change-state", "enter"]);
 
+const isMobileSearchActive = inject('isMobileSearchActive');
+
 const updateQuery = (query) => {
   emits('update:query', query);
   emits('change-state', true);
 }
 
-const inputRef = ref(null)
+const inputRef = ref(null);
+
+watch(isMobileSearchActive, async (val) => {
+  if (val) {
+    await nextTick();
+    inputRef.value?.focus();
+  }
+});
 
 onMounted(() => {
   if (document.documentElement.clientWidth < 640) {
