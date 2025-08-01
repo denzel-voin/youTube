@@ -3,6 +3,7 @@ import {computed} from "vue";
 import BaseIcon from "../../UI/BaseIcon.vue";
 import BaseTooltip from "../../UI/BaseTooltip.vue";
 import TheSearch from "./TheSearch.vue";
+import BaseModal from "../../UI/BaseModal.vue";
 
 const props = defineProps(["query", "isSmallScreen"]);
 
@@ -27,6 +28,7 @@ const classes = computed(() => {
         <BaseIcon icon="microphone" class="w-5 h-5"/>
       </button>
     </BaseTooltip>
+    <BaseModal />
   </div>
 </template>
 
