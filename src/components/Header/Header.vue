@@ -9,9 +9,11 @@ import DropdownSettings from "../DropdownSettings/DropdownSettings.vue";
 import {computed, defineComponent, onBeforeUnmount, onMounted, provide, ref} from "vue";
 import BaseTooltip from "../../UI/BaseTooltip.vue";
 import TheSearchWrapper from "./TheSearchWrapper.vue";
+import BaseModal from "../../UI/BaseModal.vue";
 
 export default defineComponent({
   components: {
+    BaseModal,
     TheSearchWrapper,
     TheSearchMobile: TheSearchWrapper,
     BaseTooltip,
@@ -52,12 +54,21 @@ export default defineComponent({
     const isSearchShow = computed(() => {
       return isMobileSearchActive.value || !isSmallScreen.value;
     })
+
+    const isVoiceModalOpen = ref(false);
+
+    const closeModal = () => {
+      isVoiceModalOpen.value = false;
+    }
+
     return {
       isSmallScreen,
       searchQuery,
       isMobileSearchActive,
       isSearchShow,
-      closeMobileSearch
+      closeMobileSearch,
+      isVoiceModalOpen,
+      closeModal
     }
   }
 })
@@ -77,15 +88,21 @@ export default defineComponent({
     <TheSearchWrapper :is-small-screen="isSmallScreen" @close="closeMobileSearch"
                       :query="searchQuery"
                       v-show="isSearchShow"
+                      :isVoiceModalOpen="isVoiceModalOpen"
+                      @closeVoiceModal="closeModal"
+                      @onOpenVoiceModal="isVoiceModalOpen = true"
     >
       <TheSearch :query="searchQuery" @update-query="searchQuery = $event"/>
     </TheSearchWrapper>
     <div class="flex items-center justify-end lg:w-1/4 sm:space-x-3 p-2 sm:px-4">
       <BaseTooltip title="Голосовой поиск">
-        <button class="sm:hidden p-2 focus:outline-none cursor-pointer">
+        <button class="sm:hidden p-2 focus:outline-none cursor-pointer" @click="isVoiceModalOpen = true">
           <BaseIcon icon="microphone" class="w-5 h-5"/>
         </button>
       </BaseTooltip>
+      <teleport to="body">
+        <BaseModal v-if="isVoiceModalOpen" @close="closeModal" />
+      </teleport>
       <BaseTooltip title="Введите запрос">
         <button class="sm:hidden p-2 focus:outline-none cursor-pointer" @click="isMobileSearchActive = true">
           <BaseIcon icon="search" class="w-5 h-5"/>

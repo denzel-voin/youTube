@@ -1,13 +1,11 @@
 <script setup>
-import {computed, ref} from "vue";
+import {computed} from "vue";
 import BaseIcon from "../../UI/BaseIcon.vue";
 import BaseTooltip from "../../UI/BaseTooltip.vue";
 import TheSearch from "./TheSearch.vue";
-import BaseModal from "../../UI/BaseModal.vue";
 
-const props = defineProps(["query", "isSmallScreen"]);
-
-const isVoiceModalOpen = ref(false);
+const props = defineProps(["query", "isSmallScreen", "isVoiceModalOpen"]);
+const emit = defineEmits(["closeVoiceModal", "onOpenVoiceModal"]);
 
 const classes = computed(() => {
   return props.isSmallScreen ?
@@ -26,13 +24,10 @@ const classes = computed(() => {
     </BaseTooltip>
     <TheSearch />
     <BaseTooltip title="Голосовой поиск">
-      <button class="h-full cursor-pointer p-2 focus:outline-none" @click="isVoiceModalOpen = true">
+      <button class="h-full cursor-pointer p-2 focus:outline-none" @click="$emit('onOpenVoiceModal')">
         <BaseIcon icon="microphone" class="w-5 h-5"/>
       </button>
     </BaseTooltip>
-    <teleport to="body">
-      <BaseModal v-if="isVoiceModalOpen" @close="isVoiceModalOpen = false" />
-    </teleport>
   </div>
 </template>
 
