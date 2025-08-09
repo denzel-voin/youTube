@@ -1,12 +1,29 @@
 <script setup>
 import BaseModal from "../../UI/BaseModal.vue";
 import BaseIcon from "../../UI/BaseIcon.vue";
-import {computed, onMounted, ref} from "vue";
+import {computed, onBeforeUnmount, onMounted, ref} from "vue";
 
 const microphonePermission = ref(false);
-const isListening = ref(false);
+const isListening = ref(true);
+const isRecording = ref(false);
+const isQuiet = ref(false);
+const recordingTimeout = ref(null);
 
-const text = computed(() => (isListening.value && microphonePermission.value) ? 'Идёт запись...' : 'Голосовой поиск');
+const text = computed(() => {
+  if (isQuiet.value) return 'Не удалось выполнить поиск. Попробуйте ещё раз';
+  if (isListening.value || isRecording.value) return 'Идёт запись...'
+  return 'Голосовой поиск'
+});
+
+const handleRecordingTimeout = () => {
+  if (isListening.value || isRecording.value) {
+    recordingTimeout.value = setTimeout(() => {
+      isRecording.value = false;
+      isListening.value = false;
+      isQuiet.value = true;
+    }, 5000)
+  }
+}
 
 const buttonClasses = computed(() => {
   return [
@@ -16,6 +33,17 @@ const buttonClasses = computed(() => {
     'p-4',
     'cursor-pointer',
     'focus:outline-none'
+  ]
+})
+
+const buttonAnimation = computed(() => {
+  return [
+    isRecording.value ? 'bg-red-500/70' : 'border border-red-500',
+    'absolute',
+    'inset-0',
+    'rounded-full',
+    'animate-ping',
+    'pointer-events-none',
   ]
 })
 
@@ -41,14 +69,34 @@ async function checkMicrophonePermission() {
   }
 }
 
+const toggleRecording = () => {
+  clearTimeout(recordingTimeout.value)
+  isQuiet.value = false;
+  if (isRecording.value) {
+    isRecording.value = false;
+    isListening.value = false;
+  } else if (isListening.value) {
+    isRecording.value = true;
+  } else {
+    isListening.value = true;
+  }
+
+  handleRecordingTimeout();
+}
+
 onMounted(async () => {
   const status = await checkMicrophonePermission();
   microphonePermission.value = status === 'granted';
+  handleRecordingTimeout();
 
   if (!microphonePermission.value) {
     await requestMicrophoneAccess();
   }
 });
+
+onBeforeUnmount(() => {
+  clearTimeout(recordingTimeout.value)
+})
 </script>
 
 <template>
@@ -62,11 +110,11 @@ onMounted(async () => {
         <div class="relative">
     <span
         v-show="isListening"
-        class="absolute inset-0 rounded-full animate-ping bg-red-500/70 pointer-events-none"
+        :class="buttonAnimation"
     ></span>
           <button
               :class="buttonClasses"
-              @click="isListening = !isListening"
+              @click="toggleRecording"
           >
             <BaseIcon icon="microphone" class="w-12 h-12"/>
           </button>
