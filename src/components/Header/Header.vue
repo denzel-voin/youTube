@@ -1,5 +1,4 @@
 <script>
-
 import DropdownApps from "../DropdownApps/DropdownApps.vue";
 import Logo from "../../UI/Logo.vue";
 import TheSearch from "./TheSearch.vue";
@@ -10,9 +9,11 @@ import {computed, defineComponent, onBeforeUnmount, onMounted, provide, ref} fro
 import BaseTooltip from "../../UI/BaseTooltip.vue";
 import TheSearchWrapper from "./TheSearchWrapper.vue";
 import BaseModal from "../../UI/BaseModal.vue";
+import TheModalSearchWithVoice from "./TheModalSearchWithVoice.vue";
 
 export default defineComponent({
   components: {
+    TheModalSearchWithVoice,
     BaseModal,
     TheSearchWrapper,
     TheSearchMobile: TheSearchWrapper,
@@ -101,7 +102,7 @@ export default defineComponent({
         </button>
       </BaseTooltip>
       <teleport to="body">
-        <BaseModal v-if="isVoiceModalOpen" @close="closeModal" />
+        <TheModalSearchWithVoice v-if="isVoiceModalOpen" @close="closeModal" />
       </teleport>
       <BaseTooltip title="Введите запрос">
         <button class="sm:hidden p-2 focus:outline-none cursor-pointer" @click="isMobileSearchActive = true">

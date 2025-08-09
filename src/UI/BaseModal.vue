@@ -48,16 +48,12 @@ onMounted(() => {
     >
       <div
           v-if="isModalOpen"
-          class="bg-white max-w-sm mx-8 my-8 relative"
+          class="bg-white max-w-1/3 mx-8 my-8 relative"
       >
         <div class="p-2 text-right">
           <BaseModalButtonClose @click="close"/>
         </div>
-        <div class="p-6">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus adipisci, aspernatur aut cupiditate
-          dolorem doloribus earum eum ex facere inventore laborum natus officia perspiciatis quo saepe sequi temporibus.
-          Alias, dignissimos?
-        </div>
+        <slot/>
       </div>
     </transition>
   </div>
