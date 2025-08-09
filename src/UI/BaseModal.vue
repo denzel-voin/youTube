@@ -48,7 +48,7 @@ onMounted(() => {
     >
       <div
           v-if="isModalOpen"
-          class="bg-white max-w-1/3 mx-8 my-8 relative"
+          class="bg-white w-1/3 mx-8 my-8 relative"
       >
         <div class="p-2 text-right">
           <BaseModalButtonClose @click="close"/>
