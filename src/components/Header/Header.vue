@@ -9,7 +9,7 @@ import {computed, defineComponent, onBeforeUnmount, onMounted, provide, ref} fro
 import BaseTooltip from "../../UI/BaseTooltip.vue";
 import TheSearchWrapper from "./TheSearchWrapper.vue";
 import BaseModal from "../../UI/BaseModal.vue";
-import TheModalSearchWithVoice from "./TheModalSearchWithVoice.vue";
+import TheModalSearchWithVoice from "./VoiceSearch/TheModalSearchWithVoice.vue";
 
 export default defineComponent({
   components: {
