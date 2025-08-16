@@ -1,7 +1,7 @@
 <script setup>
 import BaseModal from "../../UI/BaseModal.vue";
 import BaseIcon from "../../UI/BaseIcon.vue";
-import {computed, onBeforeUnmount, onMounted, ref, watch} from "vue";
+import {computed, onBeforeUnmount, onMounted, ref} from "vue";
 
 const microphonePermission = ref(false);
 const status = ref('quiet');
@@ -73,7 +73,6 @@ const toggleRecording = () => {
   } else {
     status.value = 'recording';
   }
-
   handleRecordingTimeout();
 }
 
