@@ -1,44 +1,40 @@
 <script setup>
 import BaseModal from "../../UI/BaseModal.vue";
 import BaseIcon from "../../UI/BaseIcon.vue";
-import {computed, onBeforeUnmount, onMounted, ref} from "vue";
+import {computed, onBeforeUnmount, onMounted, ref, watch} from "vue";
 
 const microphonePermission = ref(false);
-const isListening = ref(true);
-const isRecording = ref(false);
-const isQuiet = ref(false);
+const status = ref('quiet');
 const recordingTimeout = ref(null);
 
 const text = computed(() => {
-  if (isQuiet.value) return 'Не удалось выполнить поиск. Попробуйте ещё раз';
-  if (isListening.value || isRecording.value) return 'Идёт запись...'
+  if (status.value === 'quiet' && recordingTimeout.value) return 'Не удалось выполнить поиск. Попробуйте ещё раз';
+  if (['recording'].includes(status.value) && microphonePermission.value) return 'Идёт запись...'
   return 'Голосовой поиск'
 });
 
 const handleRecordingTimeout = () => {
-  if (isListening.value || isRecording.value) {
+  if (['recording'].includes(status.value)) {
     recordingTimeout.value = setTimeout(() => {
-      isRecording.value = false;
-      isListening.value = false;
-      isQuiet.value = true;
+      status.value = 'quiet';
     }, 5000)
   }
 }
 
 const buttonClasses = computed(() => {
   return [
-    (isListening.value && microphonePermission.value) ? 'bg-red-600/70' : 'bg-gray-500/30',
-    (isListening.value && microphonePermission.value) ? 'text-white' : 'text-black/60',
+    (['recording'].includes(status.value) && microphonePermission.value) ? 'bg-red-600/70' : 'bg-gray-500/30',
+    (['recording'].includes(status.value) && microphonePermission.value) ? 'text-white' : 'text-black/60',
+    (microphonePermission.value) ? 'cursor-pointer' : 'cursor-default',
     'rounded-full',
     'p-4',
-    'cursor-pointer',
     'focus:outline-none'
   ]
 })
 
 const buttonAnimation = computed(() => {
   return [
-    isRecording.value ? 'bg-red-500/70' : 'border border-red-500',
+    (['recording'].includes(status.value) && microphonePermission.value) ? 'bg-red-500/70' : '',
     'absolute',
     'inset-0',
     'rounded-full',
@@ -70,15 +66,12 @@ async function checkMicrophonePermission() {
 }
 
 const toggleRecording = () => {
+  if (!microphonePermission.value) return;
   clearTimeout(recordingTimeout.value)
-  isQuiet.value = false;
-  if (isRecording.value) {
-    isRecording.value = false;
-    isListening.value = false;
-  } else if (isListening.value) {
-    isRecording.value = true;
+  if (status.value === 'recording') {
+    status.value = 'quiet';
   } else {
-    isListening.value = true;
+    status.value = 'recording';
   }
 
   handleRecordingTimeout();
@@ -109,7 +102,7 @@ onBeforeUnmount(() => {
       <div class="flex items-center justify-center w-full mb-12 flex-col gap-6 mt-52">
         <div class="relative">
     <span
-        v-show="isListening"
+        v-show="status === 'recording'"
         :class="buttonAnimation"
     ></span>
           <button
@@ -120,7 +113,7 @@ onBeforeUnmount(() => {
           </button>
         </div>
         <p class="text-gray-800/60" v-show="microphonePermission">
-          {{ isListening ? '...' : 'Для поиска нажмите на кнопку микрофона.' }}
+          {{ status === 'recording' ? '...' : 'Для поиска нажмите на кнопку микрофона.' }}
         </p>
       </div>
     </div>
